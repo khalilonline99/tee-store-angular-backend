@@ -38,7 +38,6 @@ const options = {};
 const allProducts = productsCollection.find(query, options)
 const result = await allProducts.toArray();
 res.send(result);
-console.log(result);
 })
 
 // get product by id
@@ -48,11 +47,16 @@ app.get('/product/:id', async (req, res) => {
   const options = {};
   const result = await productsCollection.findOne(query, options);
   res.send(result);
-
-
-
 })
 
+
+// post new product
+app.post('/add-product', async(req, res) => {
+  const newProduct = req.body;
+  const result = await productsCollection.insertOne(newProduct)
+  // console.log(newProduct);
+  res.send(result)
+})
 
 
 app.get('/', (req, res) => {
