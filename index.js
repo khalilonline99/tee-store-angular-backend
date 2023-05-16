@@ -30,33 +30,57 @@ const productsCollection = client.db("teeStore").collection("products");
 //   })
 // }
 
+async function run() {
 
-// get all products
-app.get('/all-products',  async (req,res) => {
-const query = {};
-const options = {};
-const allProducts = productsCollection.find(query, options)
-const result = await allProducts.toArray();
-res.send(result);
-})
-
-// get product by id
-app.get('/product/:id', async (req, res) => {
-  const pid = req.params.id;
-  const query = { _id: new ObjectId(pid)}
-  const options = {};
-  const result = await productsCollection.findOne(query, options);
-  res.send(result);
-})
+  try {
 
 
-// post new product
-app.post('/add-product', async(req, res) => {
-  const newProduct = req.body;
-  const result = await productsCollection.insertOne(newProduct)
-  // console.log(newProduct);
-  res.send(result)
-})
+    // get all products
+    app.get('/all-products', async (req, res) => {
+      const query = {};
+      const options = {};
+      const allProducts = productsCollection.find(query, options)
+      const result = await allProducts.toArray();
+      res.send(result);
+    })
+
+    // get product by id
+    app.get('/product/:id', async (req, res) => {
+      const pid = req.params.id;
+      const query = { _id: new ObjectId(pid) }
+      const options = {};
+      const result = await productsCollection.findOne(query, options);
+      res.send(result);
+    })
+
+
+    // post new product
+    app.post('/add-product', async (req, res) => {
+      const newProduct = req.body;
+      const result = await productsCollection.insertOne(newProduct)
+      // console.log(newProduct);
+      res.send(result)
+    })
+
+
+    // delete a product
+    app.delete('/delete-product/:id', async (req, res) => {
+      const pid = req.params.id;
+      // console.log(pid);
+      const query = { _id: new ObjectId(pid) };
+      const result = await productsCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
+
+  }
+
+  finally {
+
+  }
+}
+run().catch(err => console.log(err))
 
 
 app.get('/', (req, res) => {
