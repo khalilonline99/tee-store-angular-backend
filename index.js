@@ -73,7 +73,24 @@ async function run() {
     })
 
 
-
+    // edit prodduct by id
+    app.put('/edit-product/:id', async(req, res) => {
+      const pid = req.params.id;
+      const data = req.body;
+      const options = { upsert: true};
+      const filter = { _id: new ObjectId(pid) };
+      const updateDoc = {
+        $set : {
+          title: data.title,
+          description: data.description,
+          image: data.image,
+          price: data.price,
+          properties: data.properties,
+        }
+      }
+      const result = await productsCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    })
   }
 
   finally {
